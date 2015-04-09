@@ -64,7 +64,7 @@ shift $(( OPTIND - 1 ))
 [[ -d $dir/downloads ]] || mkdir -p $dir/downloads
 [[ -d $dir/incomplete ]] || mkdir -p $dir/incomplete
 [[ -d $dir/info/blocklists ]] || mkdir -p $dir/info/blocklists
-chown -Rh debian-transmission. $dir
+chown -Rh root. $dir
 
 if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
     exec "$@"
@@ -74,14 +74,14 @@ elif [[ $# -ge 1 ]]; then
 else
     curl -Ls 'http://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz' |
                 gzip -cd > $dir/info/blocklists/bt_level1
-    chown debian-transmission. $dir/info/blocklists/bt_level1
+    chown root. $dir/info/blocklists/bt_level1
     grep -q peer-socket-tos $dir/info/settings.json ||
         sed -i '/"peer-port"/a \
     "peer-socket-tos": "lowcost",' $dir/info/settings.json
     sed -i '/"queue-stalled-enabled"/s/:.*/: true,/' $dir/info/settings.json
     sed -i '/"speed-limit-up"/s/:.*/: 10,/' $dir/info/settings.json
     sed -i '/"speed-limit-up-enabled"/s/:.*/: true,/' $dir/info/settings.json
-    exec su -l debian-transmission -s /bin/bash -c "exec transmission-daemon \
+    exec su -l root -s /bin/bash -c "exec transmission-daemon \
                 --config-dir $dir/info --blocklist --encryption-preferred \
                 --log-error -e /dev/stdout --global-seedratio 2.0 --dht \
                 --incomplete-dir $dir/incomplete --paused --auth --foreground \
