@@ -15,6 +15,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     [ -d /var/lib/transmission-daemon/info/blocklists ] || \
                 mkdir -p /var/lib/transmission-daemon/info/blocklists && \
     chown -Rh debian-transmission. /var/lib/transmission-daemon && \
+    [ -d /volumes/info ] || mkdir -p /volumes/info && \
     cp /etc/transmission-daemon/settings.json /volumes/info/settings.json && \
     rm -rf /var/lib/apt/lists/* /tmp/*
 COPY transmission.sh /usr/bin/
