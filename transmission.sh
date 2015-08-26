@@ -18,7 +18,7 @@
 
 set -o nounset                              # Treat unset variables as an error
 
-dir="/var/lib/transmission-daemon"
+dir="/volumes"
 
 ### timezone: Set the timezone for the container
 # Arguments:
@@ -67,7 +67,7 @@ shift $(( OPTIND - 1 ))
 
 [[ "${TZ:-""}" ]] && timezone "$TZ"
 
-[[ -d $dir/downloads ]] || mkdir -p $dir/downloads
+[[ -d $dir/completed ]] || mkdir -p $dir/completed
 [[ -d $dir/incomplete ]] || mkdir -p $dir/incomplete
 [[ -d $dir/info/blocklists ]] || mkdir -p $dir/info/blocklists
 chown -Rh root. $dir
@@ -94,5 +94,5 @@ else
                 --log-error -e /dev/stdout --global-seedratio 2.0 --dht \
                 --incomplete-dir $dir/incomplete --paused --auth --foreground \
                 --username '${TRUSER:-admin}' --password '${TRPASSWD:-admin}' \
-                --download-dir $dir/downloads --no-portmap --allowed \\* 2>&1"
+                --download-dir $dir/completed --no-portmap --allowed \\* 2>&1"
 fi
